@@ -4,12 +4,12 @@ from PIL import Image
 import io
 
 # ✅ Replace with your deployed Hugging Face API URL
-API_URL = "https://rituja04-date-disease-prediction.hf.space/predict/"
+API_URL = "https://rituja04-maize-disease-api.hf.space/predict/"
 
 # 🎨 Streamlit UI Configuration
-st.set_page_config(page_title="Dates Disease Detector", page_icon="🌿", layout="centered")
+st.set_page_config(page_title="Maize Disease Detector", page_icon="🌿", layout="centered")
 
-# 🎨 Add Light Green Background and Navbar Color
+# 🎨 Add Light Green Background and Navbar Styling
 st.markdown(
     """
     <style>
@@ -26,7 +26,7 @@ st.markdown(
         padding: 10px;
     }
     header {
-        background-color: #66c267 !important; /* Green Navbar */
+        background-color: #66c267 !important; /* Dark Green Navbar */
         height: 40px;
         padding: 10px;
     }
@@ -36,8 +36,8 @@ st.markdown(
 )
 
 # 🎯 Title
-st.title("🌿 Dates Disease Detection App")
-st.write("Upload a dates leaf image to predict its disease.")
+st.title("🌽 Maize Disease Detection App")
+st.write("Upload a maize leaf image to predict its disease.")
 
 # 📤 File Upload
 uploaded_file = st.file_uploader("📸 Upload Image", type=["jpg", "png", "jpeg"])
@@ -48,7 +48,7 @@ if uploaded_file:
         image = Image.open(uploaded_file).convert("RGB")
 
         # Display uploaded image
-        st.image(image, caption="📷 Uploaded Image", use_column_width=True)
+        st.image(image, caption="📷 Uploaded Image", use_container_width=True)
 
         # Convert image to bytes for API request
         image_bytes = io.BytesIO()
@@ -66,15 +66,17 @@ if uploaded_file:
                         result = response.json()
 
                         # Ensure required keys exist
-                        if "disease" in result and "details" in result:
-                            disease = result["disease"]
-                            confidence = result.get("confidence", "N/A")
-                            description = result["details"].get("description", "N/A")
-                            cause = result["details"].get("cause", "N/A")
-                            symptoms = result["details"].get("symptoms", "N/A")
-                            solution = result["details"].get("solution", "N/A")
+                        if "status" in result and "Predicted Disease" in result:
+                            status = result["status"]
+                            disease = result["Predicted Disease"]
+                            confidence = result.get("Confidence Score", "N/A")
+                            description = result.get("description", "N/A")
+                            cause = result.get("cause", "N/A")
+                            symptoms = result.get("symptoms", "N/A")
+                            solution = result.get("solution", "N/A")
 
                             # ✅ Display Results
+                            st.write(f"**Status**: {status}")
                             st.success(f"🌿 **Predicted Disease:** {disease}")
                             st.metric(label="📊 Confidence Score", value=f"{confidence}%")
                             st.write(f"💬 **Description:** {description}")
