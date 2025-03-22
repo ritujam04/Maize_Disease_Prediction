@@ -48,7 +48,7 @@ if uploaded_file:
         image = Image.open(uploaded_file).convert("RGB")
 
         # Display uploaded image
-        st.image(image, caption="📷 Uploaded Image", use_container_width=True)
+        st.image(image, caption="📷 Uploaded Image", width=500)
 
         # Convert image to bytes for API request
         image_bytes = io.BytesIO()
